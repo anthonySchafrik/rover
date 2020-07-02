@@ -37,16 +37,16 @@ const weatherOnDataEvent = async () => {
 
   try {
     sendCurrentWeatherData({
-      fahrenheit,
+      temperature: fahrenheit,
       pressure: pressure / 3.386,
       feet,
       meters,
       uvLight: voltage / 0.1,
     });
 
-    console.log('data sent');
+    console.log('weather data sent');
   } catch (error) {
-    console.log('data failed to send');
+    console.log('weather data failed to send');
     console.log(error);
   }
 

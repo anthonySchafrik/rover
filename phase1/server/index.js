@@ -3,8 +3,8 @@ const dotenv = require('dotenv');
 const express = require('express');
 const path = require('path');
 
-const healthRouter = require('./routes/healthRouter');
-const sensorRouter = require('./routes/sensorRouter');
+const healthRouter = require('./src/routes/healthRouter');
+const sensorRouter = require('./src/routes/sensorRouter');
 
 dotenv.config({
   path: path.join(__dirname, '.env'),

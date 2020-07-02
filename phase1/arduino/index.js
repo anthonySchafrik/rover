@@ -1,4 +1,4 @@
-const { Board, Thermometer } = require('johnny-five');
+const { Board } = require('johnny-five');
 
 const board = new Board({ port: 'COM3' });
 
