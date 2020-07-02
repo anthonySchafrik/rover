@@ -1,5 +1,8 @@
 const { Board } = require('johnny-five');
 
+// board for mac
+const board = new Board();
+// board for windows
 const board = new Board({ port: 'COM3' });
 
 board.on('ready', function () {

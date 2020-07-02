@@ -1,17 +1,30 @@
 const db = require('../../database/index');
 
 const weatherDataPost = async (req, res) => {
-  console.log(req.body.weatherData);
+  const { temperature, pressure, feet, meters, uvLight } = req.body.weatherData;
+  const queryText =
+    'INSERT INTO Weather( temperature, pressure, feet, meters, uvindex) VALUES ($1, $2, $3, $4, $5)';
 
-  res.sendStatus(200);
+  const queryValue = [temperature, pressure, feet, meters, uvLight];
+
+  try {
+    await db.query(queryText, queryValue);
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
 };
 
 const weatherDataGet = async (req, res) => {
   try {
-    const t = await db.query('select * from Weather');
-    res.send(t.rows);
+    const weatherData = await db.query('select * from Weather');
+
+    res.send(weatherData.rows);
   } catch (error) {
-    res.send(error);
+    console.log(error);
+    res.sendStatus(404);
   }
 };
 

@@ -2,7 +2,7 @@ const { Thermometer, Barometer, Altimeter, Sensor } = require('johnny-five');
 const sendCurrentWeatherData = require('../api/weather').sendCurrentWeatherData;
 
 const controller = 'BMP180';
-const freq = 5000;
+const freq = 1.8e6;
 
 const thermometer = new Thermometer({
   controller,
