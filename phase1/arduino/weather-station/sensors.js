@@ -2,10 +2,10 @@ const { Thermometer, Barometer, Altimeter, Sensor } = require('johnny-five');
 const sendCurrentWeatherData = require('../api/weather').sendCurrentWeatherData;
 
 const controller = 'BMP180';
-const freq = 1.8e6;
+const freq = 300000;
 
 const thermometer = new Thermometer({
-  controller,
+  controller: 'MCP9808',
   freq,
 });
 
@@ -44,9 +44,9 @@ const weatherOnDataEvent = async () => {
       uvLight: voltage / 0.1,
     });
 
-    console.log('weather data sent');
+    console.log('  weather data sent');
   } catch (error) {
-    console.log('weather data failed to send');
+    console.log('  weather data failed to send');
     console.log(error);
   }
 

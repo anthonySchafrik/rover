@@ -3,7 +3,7 @@ const { Board } = require('johnny-five');
 // board for mac
 const board = new Board();
 // board for windows
-const board = new Board({ port: 'COM3' });
+// const board = new Board({ port: 'COM3' });
 
 board.on('ready', function () {
   const weatherStation = require('./weather-station/sensors');
@@ -13,4 +13,6 @@ board.on('ready', function () {
   thermometer.on('data', () => {
     weatherOnDataEvent();
   });
+
+  console.log(`Board ready, ${new Date()}`);
 });
