@@ -27,7 +27,7 @@ const getHumidity = async () => {
   try {
     const res = await HumiditySensor.read(22, 23);
 
-    return res.humidity.toFixed(1);
+    return res.humidity.toFixed(2);
   } catch (err) {
     console.error('Failed to read Humidity Sensor data:', err);
 
@@ -43,12 +43,12 @@ const weatherOnDataEvent = async () => {
 
   const voltage = value * (5.0 / 1023.0);
 
-  console.log('  fahrenheit   : ', fahrenheit);
-  console.log('  pressure     : ', pressure / 3.386); // kpa to mercury inches
-  console.log(`  humidity     : ${await getHumidity()}%`);
-  console.log('  feet         : ', feet);
-  console.log('  meters       : ', meters);
-  console.log('  uv light     : ', voltage / 0.1);
+  console.log(`  fahrenheit : ${fahrenheit.toFixed(2)} `);
+  console.log(`  pressure   : ${(pressure / 3.386).toFixed(2)} `); // kpa to mercury inches
+  console.log(`  humidity   : ${await getHumidity()}`);
+  console.log(`  feet       : ${feet.toFixed(2)} `);
+  console.log(`  meters     : ${meters.toFixed(2)}`);
+  console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
 
   try {
     // sendCurrentWeatherData({
