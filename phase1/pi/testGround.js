@@ -15,7 +15,7 @@ const board = new Board({ io: new Raspi() });
 board.on('ready', function () {
   console.log(`Board ready, ${new Date()}`);
 
-  const uvSensor = new Sensor({ pin: 21, freq: 5000 });
+  const uvSensor = new Sensor({ pin: 21, freq: 5000, type: 'digital' });
 
   uvSensor.on('data', () => {
     const { value } = uvSensor;

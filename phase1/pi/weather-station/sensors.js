@@ -21,7 +21,7 @@ const altimeter = new Altimeter({
   freq,
 });
 
-const uvSensor = new Sensor({ pin: 21, freq });
+const uvSensor = new Sensor({ pin: 21, freq, type: 'digital' });
 
 const getHumidity = async () => {
   try {
