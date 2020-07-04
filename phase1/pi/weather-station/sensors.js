@@ -25,11 +25,11 @@ const uvSensor = new Sensor({ pin: 'A0', freq });
 
 const getHumidity = async () => {
   try {
-    const res = await sensor.read(22, 23);
+    const res = await HumiditySensor.read(22, 23);
 
     return res.humidity.toFixed(1);
   } catch (err) {
-    console.error('Failed to read sensor data:', err);
+    console.error('Failed to read Humidity Sensor data:', err);
 
     return 0;
   }
