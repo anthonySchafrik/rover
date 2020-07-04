@@ -4,7 +4,7 @@ const HumiditySensor = require('node-dht-sensor').promises;
 const sendCurrentWeatherData = require('../api/weather').sendCurrentWeatherData;
 
 const controller = 'BMP180';
-const freq = 300000;
+const freq = 5000;
 
 const thermometer = new Thermometer({
   controller: 'MCP9808',
@@ -50,20 +50,20 @@ const weatherOnDataEvent = async () => {
   console.log('  meters       : ', meters);
   console.log('  uv light     : ', voltage / 0.1);
 
-  try {
-    sendCurrentWeatherData({
-      temperature: fahrenheit,
-      pressure: pressure / 3.386,
-      feet,
-      meters,
-      uvLight: voltage / 0.1,
-    });
+  // try {
+  //   sendCurrentWeatherData({
+  //     temperature: fahrenheit,
+  //     pressure: pressure / 3.386,
+  //     feet,
+  //     meters,
+  //     uvLight: voltage / 0.1,
+  //   });
 
-    console.log('  weather data sent');
-  } catch (error) {
-    console.log('  weather data failed to send');
-    console.log(error);
-  }
+  //   console.log('  weather data sent');
+  // } catch (error) {
+  //   console.log('  weather data failed to send');
+  //   console.log(error);
+  // }
 
   console.log('--------------------------------------');
 };
