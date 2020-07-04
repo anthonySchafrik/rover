@@ -42,22 +42,24 @@ const weatherOnDataEvent = async () => {
   const { value } = uvSensor;
 
   const voltage = value * (5.0 / 1023.0);
+  const humidity = await getHumidity();
 
   console.log(`  fahrenheit : ${fahrenheit.toFixed(2)} `);
   console.log(`  pressure   : ${(pressure / 3.386).toFixed(2)} `); // kpa to mercury inches
-  console.log(`  humidity   : ${await getHumidity()}`);
+  console.log(`  humidity   : ${humidity}`);
   console.log(`  feet       : ${feet.toFixed(2)} `);
   console.log(`  meters     : ${meters.toFixed(2)}`);
   console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
 
   try {
-    // sendCurrentWeatherData({
-    //   temperature: fahrenheit,
-    //   pressure: pressure / 3.386,
-    //   feet,
-    //   meters,
-    //   uvLight: voltage / 0.1,
-    // });
+    sendCurrentWeatherData({
+      temperature: fahrenheit,
+      pressure: pressure / 3.386,
+      feet,
+      meters,
+      humidity,
+      uvLight: voltage / 0.1,
+    });
 
     console.log('  weather data sent');
   } catch (error) {
