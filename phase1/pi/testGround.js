@@ -2,23 +2,26 @@
   THIS IS JUST A TEST/IDEA PLAYGROUND NOTHING MORE
 */
 
-const { Board, Thermometer } = require('johnny-five');
+const { Board, Sensor } = require('johnny-five');
+const Raspi = require('raspi-io').RaspiIO;
 
 // board for mac
-const board = new Board();
+// const board = new Board();
 // board for windows
 // const board = new Board({ port: 'COM3' });
+// board for pi
+const board = new Board({ io: new Raspi() });
 
 board.on('ready', function () {
   console.log(`Board ready, ${new Date()}`);
-  const t = new Thermometer({
-    controller: 'MCP9808',
-    freq: 5000,
-  });
 
-  t.on('data', function () {
-    console.log('celsius: %d', this.C);
-    console.log('fahrenheit: %d', this.F);
-    console.log('kelvin: %d', this.K);
+  const uvSensor = new Sensor({ pin: 21, freq: 5000 });
+
+  uvSensor.on('data', () => {
+    const { value } = uvSensor;
+
+    const voltage = value * (5.0 / 1023.0);
+
+    console.log('  uv light     : ', voltage / 0.1);
   });
 });
