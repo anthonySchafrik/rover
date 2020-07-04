@@ -45,7 +45,7 @@ const weatherOnDataEvent = async () => {
 
   console.log('  fahrenheit   : ', fahrenheit);
   console.log('  pressure     : ', pressure / 3.386); // kpa to mercury inches
-  console.log(`  humidity     : ${getHumidity()}%`);
+  console.log(`  humidity     : ${await getHumidity()}%`);
   console.log('  feet         : ', feet);
   console.log('  meters       : ', meters);
   console.log('  uv light     : ', voltage / 0.1);
