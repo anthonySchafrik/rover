@@ -4,7 +4,7 @@ const HumiditySensor = require('node-dht-sensor').promises;
 const sendCurrentWeatherData = require('../api/weather').sendCurrentWeatherData;
 
 const controller = 'BMP180';
-const freq = 5000;
+const freq = 900000;
 
 const thermometer = new Thermometer({
   controller: 'MCP9808',
