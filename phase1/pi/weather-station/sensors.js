@@ -7,7 +7,7 @@ const controller = 'BMP180';
 const freq = 5000;
 
 const thermometer = new Thermometer({
-  controller,
+  controller: 'MCP9808',
   freq,
 });
 

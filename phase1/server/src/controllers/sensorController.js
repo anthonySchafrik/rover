@@ -2,6 +2,7 @@ const db = require('../../database/index');
 
 const weatherDataPost = async (req, res) => {
   const { temperature, pressure, feet, meters, uvLight } = req.body.weatherData;
+
   const queryText =
     'INSERT INTO Weather( temperature, pressure, feet, meters, uvindex) VALUES ($1, $2, $3, $4, $5)';
 
@@ -19,7 +20,9 @@ const weatherDataPost = async (req, res) => {
 
 const weatherDataGet = async (req, res) => {
   try {
-    const weatherData = await db.query('select * from Weather');
+    const weatherData = await db.query(
+      'SELECT temperature, pressure, feet, meters, uvindex FROM Weather'
+    );
 
     res.send(weatherData.rows);
   } catch (error) {
