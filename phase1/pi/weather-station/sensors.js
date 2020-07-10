@@ -1,10 +1,23 @@
-const { Thermometer, Barometer, Altimeter, Sensor } = require('johnny-five');
+const {
+  Thermometer,
+  Barometer,
+  Altimeter,
+  Sensor,
+  Expander,
+  Board,
+  Expander,
+} = require('johnny-five');
+
 const HumiditySensor = require('node-dht-sensor').promises;
 
 const sendCurrentWeatherData = require('../api/weather').sendCurrentWeatherData;
 
+const virtual = new Board.Virtual(new Expander('ADS1115'));
+virtual.io.REGISTER.PIN_DATA = 0xc3;
+virtual.io.REGISTER.PIN[0] = 0xc1;
+
 const controller = 'BMP180';
-const freq = 900000;
+const freq = 5000;
 
 const thermometer = new Thermometer({
   controller: 'MCP9808',
@@ -21,7 +34,7 @@ const altimeter = new Altimeter({
   freq,
 });
 
-const uvSensor = new Sensor({ pin: 21, freq, type: 'digital' });
+const uvSensor = new Sensor({ pin: 'A0', freq, board: virtual });
 
 const getHumidity = async () => {
   try {
@@ -39,9 +52,9 @@ const weatherOnDataEvent = async () => {
   const { fahrenheit } = thermometer;
   const { pressure } = barometer;
   const { feet, meters } = altimeter;
-  const { value } = uvSensor;
+  const { analog } = uvSensor;
 
-  const voltage = value * (5.0 / 1023.0);
+  const voltage = analog * (3.3 / 1023.0);
   const humidity = await getHumidity();
 
   console.log(`  fahrenheit : ${fahrenheit.toFixed(2)} `);
@@ -52,14 +65,14 @@ const weatherOnDataEvent = async () => {
   console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
 
   try {
-    sendCurrentWeatherData({
-      temperature: fahrenheit,
-      pressure: pressure / 3.386,
-      feet,
-      meters,
-      humidity,
-      uvLight: voltage / 0.1,
-    });
+    // sendCurrentWeatherData({
+    //   temperature: fahrenheit,
+    //   pressure: pressure / 3.386,
+    //   feet,
+    //   meters,
+    //   humidity,
+    //   uvLight: voltage / 0.1,
+    // });
 
     console.log('  weather data sent');
   } catch (error) {

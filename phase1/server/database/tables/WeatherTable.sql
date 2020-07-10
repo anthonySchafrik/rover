@@ -10,6 +10,9 @@ CREATE TABLE Weather
     TimeColumn TIMESTAMP default current_timestamp
 );
 
+ALTER TABLE weather
+  ADD humidity DECIMAL;
+
 -- test data for table
 INSERT INTO Weather
     (
