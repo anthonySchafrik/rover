@@ -5,7 +5,6 @@ const {
   Sensor,
   Expander,
   Board,
-  Expander,
 } = require('johnny-five');
 
 const HumiditySensor = require('node-dht-sensor').promises;
