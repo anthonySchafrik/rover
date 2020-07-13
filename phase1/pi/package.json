@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "sudo node index.js",
     "dev": "sudo nodemon index.js",
+    "start": "sudo node index.js",
+    "off": "sudo shutdown -h now",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "anthonyschafrik@gmail.com",
