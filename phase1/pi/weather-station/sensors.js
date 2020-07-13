@@ -16,7 +16,7 @@ virtual.io.REGISTER.PIN_DATA = 0xc3;
 virtual.io.REGISTER.PIN[0] = 0xc1;
 
 const controller = 'BMP180';
-const freq = 5000;
+const freq = 900000;
 
 const thermometer = new Thermometer({
   controller: 'MCP9808',
@@ -64,14 +64,14 @@ const weatherOnDataEvent = async () => {
   console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
 
   try {
-    // sendCurrentWeatherData({
-    //   temperature: fahrenheit,
-    //   pressure: pressure / 3.386,
-    //   feet,
-    //   meters,
-    //   humidity,
-    //   uvLight: voltage / 0.1,
-    // });
+    sendCurrentWeatherData({
+      temperature: fahrenheit,
+      pressure: pressure / 3.386,
+      feet,
+      meters,
+      humidity,
+      uvLight: voltage / 0.1,
+    });
 
     console.log('  weather data sent');
   } catch (error) {
