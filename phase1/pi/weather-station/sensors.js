@@ -8,8 +8,11 @@ const {
 } = require('johnny-five');
 
 const HumiditySensor = require('node-dht-sensor').promises;
-
 const sendCurrentWeatherData = require('../api/weather').sendCurrentWeatherData;
+
+// if api call fails data gets stored and flag get set
+const hasDataToSend = false;
+const storedData = [];
 
 const virtual = new Board.Virtual(new Expander('ADS1115'));
 virtual.io.REGISTER.PIN_DATA = 0xc3;
@@ -75,6 +78,18 @@ const weatherOnDataEvent = async () => {
 
     console.log('  weather data sent');
   } catch (error) {
+    hasDataToSend = true;
+
+    storedData.push({
+      temperature: fahrenheit,
+      pressure: pressure / 3.386,
+      feet,
+      meters,
+      humidity,
+      uvLight: voltage / 0.1,
+      timecolumn: new Date(),
+    });
+
     console.log('  weather data failed to send');
     console.log(error);
   }

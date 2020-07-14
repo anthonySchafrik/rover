@@ -35,7 +35,7 @@ const weatherDataGet = async (req, res) => {
 
   try {
     const weatherData = await db.query(
-      'SELECT temperature, pressure, feet, meters, uvindex FROM Weather'
+      'SELECT temperature, pressure, feet, meters, uvindex, timecolumn FROM Weather'
     );
 
     res.send(weatherData.rows);
