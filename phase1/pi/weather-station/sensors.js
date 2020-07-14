@@ -64,14 +64,14 @@ const weatherOnDataEvent = async () => {
   console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
 
   try {
-    sendCurrentWeatherData({
-      temperature: fahrenheit,
-      pressure: pressure / 3.386,
-      feet,
-      meters,
-      humidity,
-      uvLight: voltage / 0.1,
-    });
+//     sendCurrentWeatherData({
+//       temperature: fahrenheit,
+//       pressure: pressure / 3.386,
+//       feet,
+//       meters,
+//       humidity,
+//       uvLight: voltage / 0.1,
+//     });
 
     console.log('  weather data sent');
   } catch (error) {
