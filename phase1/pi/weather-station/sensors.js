@@ -78,8 +78,6 @@ const weatherOnDataEvent = async () => {
 
     console.log('  weather data sent');
   } catch (error) {
-    hasDataToSend = true;
-
     storedData.push({
       temperature: fahrenheit,
       pressure: pressure / 3.386,
@@ -89,6 +87,8 @@ const weatherOnDataEvent = async () => {
       uvLight: voltage / 0.1,
       timecolumn: new Date(),
     });
+
+    hasDataToSend = true;
 
     console.log('  weather data failed to send');
     console.log(error);
