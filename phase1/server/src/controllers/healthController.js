@@ -1,5 +1,8 @@
+const Logger = require('js-logger');
+
 const healthCheck = (req, res) => {
-  console.log('health check coming in');
+  Logger.warn('Health check coming on');
+
   res.sendStatus(200);
 };
 

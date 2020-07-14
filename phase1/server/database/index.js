@@ -1,4 +1,6 @@
 const pg = require('pg');
+const Logger = require('js-logger');
+
 const { user, host, database, password, port } = require('./config');
 
 const client = new pg.Client({
@@ -11,9 +13,9 @@ const client = new pg.Client({
 
 client.connect((err) => {
   if (err) {
-    console.log(`An error has happen connecting to pg database; -->: ${err}`);
+    Logger.error(`An error has happen connecting to pg database; -->: ${err}`);
   } else {
-    console.log(`Connected to pg.`);
+    Logger.info(`Connected to pg.`);
   }
 });
 
