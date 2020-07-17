@@ -67,7 +67,7 @@ const weatherOnDataEvent = async () => {
   console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
 
   try {
-    sendCurrentWeatherData({
+    await sendCurrentWeatherData({
       temperature: fahrenheit,
       pressure: pressure / 3.386,
       feet,
@@ -80,7 +80,7 @@ const weatherOnDataEvent = async () => {
       const data = handleFailedApi(storedData);
 
       if (data.length === 0) {
-        console.log('  Stored data sent');
+        console.log('  Stored weather data sent');
       } else {
         storedData = data;
       }
