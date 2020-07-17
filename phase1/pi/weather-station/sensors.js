@@ -76,6 +76,16 @@ const weatherOnDataEvent = async () => {
       uvLight: voltage / 0.1,
     });
 
+    if (hasDataToSend) {
+      const data = handleFailedApi(storedData);
+
+      if (data.length === 0) {
+        console.log('  Stored data sent');
+      } else {
+        storedData = data;
+      }
+    }
+
     console.log('  weather data sent');
   } catch (error) {
     storedData.push({
