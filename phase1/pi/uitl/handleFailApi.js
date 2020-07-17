@@ -31,7 +31,7 @@ const handleFailedApi = (dataToSend) => {
           return weatherPostApi(dataToSend);
         }
         console.log('healthCheck api down');
-      }, 300000);
+      }, 60000);
     }
   }
 };
