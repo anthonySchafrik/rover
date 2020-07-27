@@ -9,6 +9,8 @@ const {
 
 const HumiditySensor = require('node-dht-sensor').promises;
 const sendCurrentWeatherData = require('../api/weather').sendCurrentWeatherData;
+const handleFailedWeatherApiPost = require('../uitl/handleFailApi')
+  .handleFailedWeatherApiPost;
 
 // if api call fails data gets stored and flag get set
 var hasWeatherDataToSend = false;
@@ -19,7 +21,7 @@ virtual.io.REGISTER.PIN_DATA = 0xc3;
 virtual.io.REGISTER.PIN[0] = 0xc1;
 
 const controller = 'BMP180';
-const freq = 900000;
+const freq = 300000;
 
 const thermometer = new Thermometer({
   controller: 'MCP9808',
@@ -44,7 +46,7 @@ const getHumidity = async () => {
 
     return res.humidity.toFixed(2);
   } catch (err) {
-    console.error('Failed to read Humidity Sensor data:', err);
+    console.error('  Failed to read Humidity Sensor data:', err);
 
     return 0;
   }
@@ -67,38 +69,47 @@ const weatherOnDataEvent = async () => {
   console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
 
   try {
-    await sendCurrentWeatherData({
-      temperature: fahrenheit,
-      pressure: pressure / 3.386,
-      feet,
-      meters,
-      humidity,
-      uvLight: voltage / 0.1,
-    });
+    await sendCurrentWeatherData([
+      {
+        temperature: fahrenheit.toFixed(2),
+        pressure: (pressure / 3.386).toFixed(2),
+        feet: feet.toFixed(2),
+        meters: meters.toFixed(2),
+        humidity,
+        uvLight: (voltage / 0.1).toFixed(2),
+      },
+    ]);
 
-    console.log('after api call');
+    if (hasWeatherDataToSend) {
+      const returnedWeatherData = await handleFailedWeatherApiPost(
+        storedWeatherData
+      );
 
-    if (hasDataToSend) {
-      const data = handleFailedApi(storedData);
+      console.log({ returnedWeatherData });
 
-      if (data.length === 0) {
+      if (
+        returnedWeatherData !== undefined &&
+        returnedWeatherData.status === 200
+      ) {
         console.log('  Stored weather data sent');
+
+        storedWeatherData = [];
       } else {
-        storedData = data;
+        storedWeatherData = returnedWeatherData.data;
       }
     }
 
     console.log('  weather data sent');
   } catch (error) {
-    // console.log(error);
+    console.log(`  Error when sending weatherData => ${error}`);
 
     storedWeatherData.push({
-      temperature: fahrenheit,
-      pressure: pressure / 3.386,
-      feet,
-      meters,
+      temperature: fahrenheit.toFixed(2),
+      pressure: (pressure / 3.386).toFixed(2),
+      feet: feet.toFixed(2),
+      meters: meters.toFixed(2),
       humidity,
-      uvLight: voltage / 0.1,
+      uvLight: (voltage / 0.1).toFixed(2),
       timecolumn: new Date(),
     });
 
@@ -108,7 +119,6 @@ const weatherOnDataEvent = async () => {
   }
 
   console.log('--------------------------------------');
-  console.log('this is storedData', storedWeatherData);
 };
 
 module.exports = {

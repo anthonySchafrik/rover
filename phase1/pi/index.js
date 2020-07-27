@@ -8,8 +8,12 @@ board.on('ready', function () {
   const { thermometer } = weatherStation.sensors;
   const { weatherOnDataEvent } = weatherStation.sensorFunctions;
 
-  thermometer.on('data', () => {
-    weatherOnDataEvent();
+  thermometer.on('data', async () => {
+    try {
+      weatherOnDataEvent();
+    } catch (error) {
+      console.log('error in thermometer.on ', error);
+    }
   });
 
   console.log(`Board ready, ${new Date()}`);

@@ -11,12 +11,9 @@ const client = new pg.Client({
   port,
 });
 
-client.connect((err) => {
-  if (err) {
-    Logger.error(`An error has happen connecting to pg database; -->: ${err}`);
-  } else {
-    Logger.info(`Connected to pg.`);
-  }
-});
+client
+  .connect()
+  .then(() => Logger.info('connected to database'))
+  .catch((err) => Logger.error('connection error', err.stack));
 
 module.exports = client;
