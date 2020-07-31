@@ -4,29 +4,57 @@ const Logger = require('js-logger');
 const weatherDataPost = async (req, res) => {
   Logger.warn('Weather data post request coming in');
 
-  const {
-    temperature,
-    pressure,
-    feet,
-    meters,
-    uvLight,
-    humidity,
-  } = req.body.weatherData;
+  const weatherData = req.body.weatherData;
 
-  Logger.debug({ temperature, pressure, feet, meters, uvLight, humidity });
+  Logger.debug({
+    weatherData,
+  });
 
-  const queryText =
-    'INSERT INTO Weather( temperature, pressure, feet, meters, uvindex, humidity) VALUES ($1, $2, $3, $4, $5, $6)';
+  const dataWithError = [];
 
-  const queryValue = [temperature, pressure, feet, meters, uvLight, humidity];
+  await weatherData.forEach(async (data) => {
+    const {
+      temperature,
+      pressure,
+      feet,
+      meters,
+      uvLight,
+      humidity,
+      timecolumn = new Date(),
+    } = data;
 
-  try {
-    await db.query(queryText, queryValue);
+    const queryValue = [
+      temperature,
+      pressure,
+      feet,
+      meters,
+      uvLight,
+      timecolumn,
+      humidity,
+    ];
 
+    const queryText =
+      'INSERT INTO Weather( temperature, pressure, feet, meters, uvindex, timecolumn, humidity) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+
+    try {
+      await db.query(queryText, queryValue);
+
+      Logger.warn('Weather data saved');
+    } catch (error) {
+      Logger.error(error);
+
+      dataWithError.push(data);
+    }
+  });
+
+  Logger.debug({
+    dataWithError,
+  });
+
+  if (dataWithError.length > 0) {
+    res.send(dataWithError).status(500);
+  } else {
     res.sendStatus(200);
-  } catch (error) {
-    Logger.error(error);
-    res.sendStatus(500);
   }
 };
 
@@ -35,7 +63,7 @@ const weatherDataGet = async (req, res) => {
 
   try {
     const weatherData = await db.query(
-      'SELECT temperature, pressure, feet, meters, uvindex FROM Weather'
+      'SELECT temperature, pressure, feet, meters, uvindex, timecolumn, humidity FROM Weather'
     );
 
     res.send(weatherData.rows);

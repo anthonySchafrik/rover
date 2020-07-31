@@ -11,7 +11,7 @@ CREATE TABLE Weather
 );
 
 ALTER TABLE weather
-  ADD humidity DECIMAL;
+    ADD humidity DECIMAL;
 
 -- test data for table
 INSERT INTO Weather

@@ -28,6 +28,7 @@ app.use(bodyParser.json());
 app.use(apiBase, healthRouter);
 app.use(apiBase, sensorRouter);
 
+/* ------ This is for real time logger update ------ */
 app.post(`${apiBase}/logger`, (req, res) => {
   const loggerLevel = req.body.loggerLevel;
 
