@@ -1,6 +1,6 @@
 const { Motor } = require('johnny-five');
 
-const rightMotor = new Motor({
+const leftMotor = new Motor({
   pins: {
     dir: 'P1-11',
     pwm: 'P1-12',
@@ -8,7 +8,7 @@ const rightMotor = new Motor({
   invertPWM: true,
 });
 
-const leftMotor = new Motor({
+const rightMotor = new Motor({
   pins: {
     dir: 'P1-31',
     pwm: 'P1-32',
@@ -16,30 +16,84 @@ const leftMotor = new Motor({
   invertPWM: true,
 });
 
+const stop = () => {
+  leftMotor.stop();
+  rightMotor.stop();
+};
+
 const driveF = () => {
-  motor1.forward(120);
-  motor2.reverse(125);
+  setTimeout(() => {
+    rightMotor.forward(125);
+  }, 1);
+
+  leftMotor.forward(150);
 
   setTimeout(() => {
-    motor1.stop();
-    motor2.stop();
+    stop();
   }, 2000);
 };
 
 const driveB = () => {
-  motor1.reverse(120);
-  motor2.forward(125);
+  setTimeout(() => {
+    leftMotor.reverse(125);
+  }, 1);
+
+  rightMotor.reverse(125);
 
   setTimeout(() => {
-    motor1.stop();
-    motor2.stop();
+    stop();
   }, 2000);
 };
 
+const leftTurn = () => {
+  rightMotor.forward(75);
+  leftMotor.reverse(75);
+
+  setTimeout(() => {
+    stop();
+  }, 1500);
+};
+
+const rightTurn = () => {
+  rightMotor.reverse(75);
+  leftMotor.forward(75);
+
+  setTimeout(() => {
+    stop();
+  }, 1500);
+};
+
+const motorDemo = () => {
+  driveF();
+
+  setTimeout(() => {
+    leftTurn();
+  }, 4000);
+
+  setTimeout(() => {
+    driveB();
+  }, 6000);
+
+  setTimeout(() => {
+    rightTurn();
+  }, 9000);
+
+  setTimeout(() => {
+    driveF();
+  }, 11000);
+};
+
 module.exports = {
-  motors: { rightMotor, leftMotor },
+  motors: {
+    rightMotor,
+    leftMotor,
+  },
   motorFunctions: {
     driveF,
     driveB,
+    leftTurn,
+    rightTurn,
+    stop,
+    motorDemo,
   },
 };
