@@ -1,22 +1,14 @@
-#!/usr/bin/env python3
-########################################################################
-# Filename    : UltrasonicRanging.py
-# Description : Get distance via UltrasonicRanging sensor
-# auther      : www.freenove.com
-# modification: 2019/12/28
-########################################################################
 import time
 import RPi.GPIO as GPIO
 
 
 trigPin = 16
 echoPin = 18
-MAX_DISTANCE = 220          # define the maximum measuring distance, unit: cm
-# calculate timeout according to the maximum measuring distance
+MAX_DISTANCE = 220
 timeOut = MAX_DISTANCE*60
 
 
-def pulseIn(pin, level, timeOut):  # obtain pulse time of a pin under timeOut
+def pulseIn(pin, level, timeOut):
     t0 = time.time()
     while(GPIO.input(pin) != level):
         if((time.time() - t0) > timeOut*0.000001):
@@ -29,24 +21,21 @@ def pulseIn(pin, level, timeOut):  # obtain pulse time of a pin under timeOut
     return pulseTime
 
 
-def getSonar():     # get the measurement results of ultrasonic module,with unit: cm
-    GPIO.output(trigPin, GPIO.HIGH)      # make trigPin output 10us HIGH level
-    time.sleep(0.00001)     # 10us
-    GPIO.output(trigPin, GPIO.LOW)  # make trigPin output LOW level
-    # read plus time of echoPin
+def getSonar():
+    GPIO.output(trigPin, GPIO.HIGH)
+    time.sleep(0.00001)
+    GPIO.output(trigPin, GPIO.LOW)
     pingTime = pulseIn(echoPin, GPIO.HIGH, timeOut)
-    # calculate distance with sound speed 340m/s
     distance = pingTime * 340.0 / 2.0 / 10000.0
     print(("%.2f" % (distance)))
-    # return distance
     return "does it come back"
 
 
 def setup():
     GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BOARD)      # use PHYSICAL GPIO Numbering
-    GPIO.setup(trigPin, GPIO.OUT)   # set trigPin to OUTPUT mode
-    GPIO.setup(echoPin, GPIO.IN)    # set echoPin to INPUT mode
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(trigPin, GPIO.OUT)
+    GPIO.setup(echoPin, GPIO.IN)
 
 
 setup()

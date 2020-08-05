@@ -1,7 +1,7 @@
 const api = require('./api');
 
 const healthCheck = () => {
-  return api.post('/health');
+  return api.get('/health');
 };
 
 module.exports = { healthCheck };
