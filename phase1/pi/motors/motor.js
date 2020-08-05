@@ -1,4 +1,18 @@
 const { Motor } = require('johnny-five');
+let { PythonShell } = require('python-shell');
+
+let distance;
+
+// setInterval(() => {
+//   PythonShell.run(
+//     './UltrasonicRanging.py',
+//     { mode: 'text', pythonOptions: ['-u'] },
+//     function (err, results) {
+//       if (err) throw err;
+//       distance = results[0];
+//     }
+//   );
+// }, 500);
 
 const leftMotor = new Motor({
   pins: {
@@ -22,9 +36,22 @@ const stop = () => {
 };
 
 const driveF = () => {
-  setTimeout(() => {
-    rightMotor.forward(125);
-  }, 1);
+  // PythonShell.run(
+  //   './UltrasonicRanging.py',
+  //   { mode: 'text', pythonOptions: ['-u'] },
+  //   function (err, results) {
+  //     if (err) throw err;
+  //     distance = results[0];
+  //   }
+  // );
+
+  // if (distance < 10) {
+  //   console.log('too close');
+  //   stop();
+  //   return;
+  // }
+
+  rightMotor.forward(125);
 
   leftMotor.forward(150);
 
@@ -83,6 +110,32 @@ const motorDemo = () => {
   }, 11000);
 };
 
+const autoRoam = () => {
+  setInterval(() => {
+    PythonShell.run(
+      './UltrasonicRanging.py',
+      { mode: 'text', pythonOptions: ['-u'] },
+      function (err, results) {
+        if (err) throw err;
+        distance = results[0];
+      }
+    );
+
+    console.log(distance);
+
+    if (distance < 14) {
+      console.log('back', distance);
+      driveB();
+    }
+
+    if (distance > 15) {
+      driveF();
+    } else {
+      leftTurn();
+    }
+  }, 1000);
+};
+
 module.exports = {
   motors: {
     rightMotor,
@@ -95,5 +148,6 @@ module.exports = {
     rightTurn,
     stop,
     motorDemo,
+    autoRoam,
   },
 };

@@ -17,6 +17,7 @@ board.on('ready', function () {
     rightTurn,
     stop,
     motorDemo,
+    autoRoam,
   } = motors.motorFunctions;
 
   board.repl.inject({
@@ -28,6 +29,7 @@ board.on('ready', function () {
     rightTurn,
     stop,
     motorDemo,
+    autoRoam,
   });
 
   // thermometer.on('data', async () => {

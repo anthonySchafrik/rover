@@ -1,27 +1,30 @@
-/* 
-  THIS IS JUST A TEST/IDEA PLAYGROUND NOTHING MORE
-*/
+// /*
+//   THIS IS JUST A TEST/IDEA PLAYGROUND NOTHING MORE
+// */
 
-const { Board, Sensor } = require('johnny-five');
-const Raspi = require('raspi-io').RaspiIO;
+// var five = require('johnny-five');
+// var PiIO = require('pi-io');
 
-// board for mac
-// const board = new Board();
-// board for windows
-// const board = new Board({ port: 'COM3' });
-// board for pi
-const board = new Board({ io: new Raspi() });
+// var board = new five.Board({
+//   io: new PiIO(),
+// });
 
-board.on('ready', function () {
-  console.log(`Board ready, ${new Date()}`);
+// board.on('ready', function () {
+//   var proximity = new five.Proximity({
+//     controller: PiIO.HCSR04, // Custom controller
+//     triggerPin: 'GPIO23',
+//     echoPin: 'GPIO24',
+//   });
 
-  const uvSensor = new Sensor({ pin: 21, freq: 5000, type: 'digital' });
+//   proximity.on('change', function () {
+//     console.log('cm: ', this.cm);
+//   });
+// });
 
-  uvSensor.on('data', () => {
-    const { value } = uvSensor;
-
-    const voltage = value * (5.0 / 1023.0);
-
-    console.log('  uv light     : ', voltage / 0.1);
-  });
+$.ajax({
+  type: 'POST',
+  url: '~/UltrasonicRanging.py',
+  data: {},
+}).done(function (o) {
+  console.log(o);
 });

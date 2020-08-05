@@ -17,6 +17,7 @@
     "johnny-five": "^2.0.0",
     "node-dht-sensor": "^0.4.2",
     "path": "^0.12.7",
+    "python-shell": "^2.0.1",
     "raspi-io": "^11.0.0"
   }
 }

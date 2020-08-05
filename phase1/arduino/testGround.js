@@ -2,23 +2,24 @@
   THIS IS JUST A TEST/IDEA PLAYGROUND NOTHING MORE
 */
 
-const { Board, Thermometer } = require('johnny-five');
+const { Board, Proximity } = require('johnny-five');
 
 // board for mac
-const board = new Board();
+// const board = new Board();
 // board for windows
-// const board = new Board({ port: 'COM3' });
+const board = new Board({ port: 'COM3' });
 
 board.on('ready', function () {
-  console.log(`Board ready, ${new Date()}`);
-  const t = new Thermometer({
-    controller: 'MCP9808',
-    freq: 5000,
+  const proximity = new Proximity({
+    controller: 'HCSR04',
+    pin: 7,
   });
 
-  t.on('data', function () {
-    console.log('celsius: %d', this.C);
-    console.log('fahrenheit: %d', this.F);
-    console.log('kelvin: %d', this.K);
+  proximity.on('change', () => {
+    const { centimeters, inches } = proximity;
+    console.log('Proximity: ');
+    console.log('  cm  : ', centimeters);
+    console.log('  in  : ', inches);
+    console.log('-----------------');
   });
 });
