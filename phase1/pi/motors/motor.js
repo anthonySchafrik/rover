@@ -1,18 +1,7 @@
 const { Motor } = require('johnny-five');
 let { PythonShell } = require('python-shell');
 
-let distance;
-
-// setInterval(() => {
-//   PythonShell.run(
-//     './UltrasonicRanging.py',
-//     { mode: 'text', pythonOptions: ['-u'] },
-//     function (err, results) {
-//       if (err) throw err;
-//       distance = results[0];
-//     }
-//   );
-// }, 500);
+const timer = 2000;
 
 const leftMotor = new Motor({
   pins: {
@@ -36,28 +25,13 @@ const stop = () => {
 };
 
 const driveF = () => {
-  // PythonShell.run(
-  //   './UltrasonicRanging.py',
-  //   { mode: 'text', pythonOptions: ['-u'] },
-  //   function (err, results) {
-  //     if (err) throw err;
-  //     distance = results[0];
-  //   }
-  // );
-
-  // if (distance < 10) {
-  //   console.log('too close');
-  //   stop();
-  //   return;
-  // }
-
   rightMotor.forward(125);
 
   leftMotor.forward(150);
 
   setTimeout(() => {
     stop();
-  }, 2000);
+  }, timer);
 };
 
 const driveB = () => {
@@ -69,7 +43,7 @@ const driveB = () => {
 
   setTimeout(() => {
     stop();
-  }, 2000);
+  }, timer);
 };
 
 const leftTurn = () => {
@@ -111,29 +85,37 @@ const motorDemo = () => {
 };
 
 const autoRoam = () => {
-  setInterval(() => {
-    PythonShell.run(
-      './UltrasonicRanging.py',
+  let distance;
+  let count = 0;
+  setInterval(async () => {
+    console.log('start of interval');
+    await PythonShell.run(
+      './motors/UltrasonicRanging.py',
       { mode: 'text', pythonOptions: ['-u'] },
       function (err, results) {
         if (err) throw err;
-        distance = results[0];
+        distance = Number(results[0]);
+
+        console.log('This is distance => ', distance);
+        if (distance < 15) {
+          console.log('back', distance);
+          driveB();
+
+          setTimeout(() => {
+            leftTurn();
+          }, 2500);
+        } else {
+          console.log('going fwd');
+          driveF();
+        }
+        console.log('end of function');
+        console.log(count);
+        count++;
+        console.log('------------------');
+        console.log('');
       }
     );
-
-    console.log(distance);
-
-    if (distance < 14) {
-      console.log('back', distance);
-      driveB();
-    }
-
-    if (distance > 15) {
-      driveF();
-    } else {
-      leftTurn();
-    }
-  }, 1000);
+  }, 6000);
 };
 
 module.exports = {
@@ -149,5 +131,6 @@ module.exports = {
     stop,
     motorDemo,
     autoRoam,
+    getDistance,
   },
 };

@@ -21,10 +21,17 @@
 //   });
 // });
 
-$.ajax({
-  type: 'POST',
-  url: '~/UltrasonicRanging.py',
-  data: {},
-}).done(function (o) {
-  console.log(o);
-});
+const test = () => {
+  console.log('fired');
+
+  setTimeout(() => {
+    console.log('setTimeout');
+  }, 2000);
+};
+
+const auto = () => {
+  setInterval(() => {
+    console.log('setInterval');
+    test();
+  }, 4000);
+};
