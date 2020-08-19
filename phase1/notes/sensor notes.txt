@@ -1,0 +1,22 @@
+Peripherals/Wiring Pi Pin/Physical Pin
+
+dht22
+  gpio23/4/P1-16 this will have to be moved dude to ultra sonic
+
+SDA1/SCL1
+  1) BMP180 from the same plug for 2 and 3
+  2) MCP9808  
+  3) ADS1115 A0 then connects to uv sensor
+
+motors
+  left
+    dir) GPIO17/0/P1-11
+    pwm) GPIO18orPWM0/1/P1-12
+	
+  right
+    dir) GPIO6/22/P1-31		
+    pwm) GPIO12orPWM0/26/P1-32
+
+Ultra sonic note that in the code i use 16/18 i guess you drop off the p1-
+  trigPin = GPIO23/4/P1-16
+  echoPin = GPIO24/5/P1-18
