@@ -1,4 +1,8 @@
 const { Motor } = require('johnny-five');
+let { PythonShell } = require('python-shell');
+
+const timer = 2000;
+let interval;
 
 const leftMotor = new Motor({
   pins: {
@@ -22,15 +26,13 @@ const stop = () => {
 };
 
 const driveF = () => {
-  setTimeout(() => {
-    rightMotor.forward(125);
-  }, 1);
+  rightMotor.forward(125);
 
   leftMotor.forward(150);
 
   setTimeout(() => {
     stop();
-  }, 2000);
+  }, timer);
 };
 
 const driveB = () => {
@@ -42,25 +44,25 @@ const driveB = () => {
 
   setTimeout(() => {
     stop();
-  }, 2000);
+  }, timer);
 };
 
 const leftTurn = () => {
-  rightMotor.forward(75);
-  leftMotor.reverse(75);
+  rightMotor.forward(100);
+  leftMotor.reverse(100);
 
   setTimeout(() => {
     stop();
-  }, 1500);
+  }, 750);
 };
 
 const rightTurn = () => {
-  rightMotor.reverse(75);
-  leftMotor.forward(75);
+  rightMotor.reverse(100);
+  leftMotor.forward(100);
 
   setTimeout(() => {
     stop();
-  }, 1500);
+  }, 750);
 };
 
 const motorDemo = () => {
@@ -83,6 +85,46 @@ const motorDemo = () => {
   }, 11000);
 };
 
+const autoRoam = () => {
+  let distance;
+  let count = 0;
+  interval = setInterval(async () => {
+    // console.log('start of interval');
+    await PythonShell.run(
+      './motors/UltrasonicRanging.py',
+      { mode: 'text', pythonOptions: ['-u'] },
+      function (err, results) {
+        if (err) throw err;
+        distance = Number(results[0]);
+
+        // console.log('This is distance => ', distance);
+        if (distance < 15) {
+          // console.log('back', distance);
+          driveB();
+
+          setTimeout(() => {
+            if (Math.random() > 0.3) {
+              leftTurn();
+            } else {
+              rightTurn();
+            }
+          }, 2500);
+        } else {
+          // console.log('going fwd');
+          driveF();
+        }
+        // console.log('end of function');
+        // console.log(count);
+        // count++;
+        // console.log('------------------');
+        // console.log('');
+      }
+    );
+  }, 6000);
+};
+
+const stopRoam = () => clearInterval(interval);
+
 module.exports = {
   motors: {
     rightMotor,
@@ -95,5 +137,7 @@ module.exports = {
     rightTurn,
     stop,
     motorDemo,
+    autoRoam,
+    stopRoam,
   },
 };
