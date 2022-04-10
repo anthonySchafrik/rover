@@ -6,16 +6,16 @@ let interval;
 
 const leftMotor = new Motor({
   pins: {
-    dir: 'P1-11',
-    pwm: 'P1-12',
+    dir: 'P1-12',
+    pwm: 'P1-11',
   },
   invertPWM: true,
 });
 
 const rightMotor = new Motor({
   pins: {
-    dir: 'P1-31',
-    pwm: 'P1-32',
+    dir: 'P1-32',
+    pwm: 'P1-31',
   },
   invertPWM: true,
 });
