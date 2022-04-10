@@ -97,9 +97,9 @@ const autoRoam = () => {
         if (err) throw err;
         distance = Number(results[0]);
 
-        // console.log('This is distance => ', distance);
+        console.log('This is distance => ', distance);
         if (distance < 15) {
-          // console.log('back', distance);
+          console.log('back', distance);
           driveB();
 
           setTimeout(() => {
@@ -110,7 +110,7 @@ const autoRoam = () => {
             }
           }, 2500);
         } else {
-          // console.log('going fwd');
+          console.log('going fwd');
           driveF();
         }
         // console.log('end of function');

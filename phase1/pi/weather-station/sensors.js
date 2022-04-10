@@ -16,15 +16,15 @@ const handleFailedWeatherApiPost = require('../uitl/handleFailApi')
 var hasWeatherDataToSend = false;
 var storedWeatherData = [];
 
-// const virtual = new Board.Virtual(new Expander('ADS1115'));
-// virtual.io.REGISTER.PIN_DATA = 0xc3;
-// virtual.io.REGISTER.PIN[0] = 0xc1;
+const virtual = new Board.Virtual(new Expander('ADS1115'));
+virtual.io.REGISTER.PIN_DATA = 0xc3;
+virtual.io.REGISTER.PIN[0] = 0xc1;
 
 const controller = 'BMP180';
-const freq = 10000 //300000;
+const freq = 30000 //300000;
 
 const thermometer = new Thermometer({
-  controller, //: 'MCP9808',
+  controller: 'MCP9808',
   freq,
 });
 
@@ -38,35 +38,35 @@ const altimeter = new Altimeter({
   freq,
 });
 
-// const uvSensor = new Sensor({ pin: 'A0', freq, board: virtual });
+const uvSensor = new Sensor({ pin: 'A0', freq, board: virtual });
 
-// const getHumidity = async () => {
-//   try {
-//     const res = await HumiditySensor.read(22, 16);
+const getHumidity = async () => {
+  try {
+    const res = await HumiditySensor.read(22, 16);
+    
+    return res.humidity.toFixed(2);
+  } catch (err) {
+    console.error('  Failed to read Humidity Sensor data:', err);
 
-//     return res.humidity.toFixed(2);
-//   } catch (err) {
-//     console.error('  Failed to read Humidity Sensor data:', err);
-
-//     return 0;
-//   }
-// };
+    return 0;
+  }
+};
 
 const weatherOnDataEvent = async () => {
   const { fahrenheit } = thermometer;
   const { pressure } = barometer;
   const { feet, meters } = altimeter;
-  // const { analog } = uvSensor;
+  const { analog } = uvSensor;
 
-  // const voltage = analog * (3.3 / 1023.0);
-  // const humidity = await getHumidity();
+  const voltage = analog * (3.3 / 1023.0);
+  const humidity = await getHumidity();
 
   console.log(`  fahrenheit : ${fahrenheit.toFixed(2)} `);
   console.log(`  pressure   : ${(pressure / 3.386).toFixed(2)} `); // kpa to mercury inches
-  // console.log(`  humidity   : ${humidity}`);
+  console.log(`  humidity   : ${humidity}`);
   console.log(`  feet       : ${feet.toFixed(2)} `);
   console.log(`  meters     : ${meters.toFixed(2)}`);
-  // console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
+  console.log(`  uv light   : ${(voltage / 0.1).toFixed(2)}`);
 
   // try {
   //   await sendCurrentWeatherData([
@@ -117,12 +117,12 @@ const weatherOnDataEvent = async () => {
 
   //   console.log('  weather data failed to send');
   // }
-  console.log(`  ${new Date()}`);
+  // console.log(`  ${new Date()}`);
   console.log('--------------------------------------');
 };
 
 module.exports = {
-  sensors: { thermometer, barometer, altimeter,  }, //uvSensor
+  sensors: { thermometer, barometer, altimeter, uvSensor },
   sensorFunctions: {
     weatherOnDataEvent,
   },
